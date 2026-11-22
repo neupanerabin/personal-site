@@ -1,0 +1,73 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+type Props = { post: CollectionEntry<'blog'> };
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+const fmt = (d: Date) =>
+  d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+---
+
+<Layout title={`${post.data.title} — Rabin Neupane`} description={post.data.description}>
+  <section>
+    <div class="wrap article">
+      <a href="/blog" class="back">← All posts</a>
+      <h1>{post.data.title}</h1>
+      <p class="meta muted">
+        {fmt(post.data.pubDate)}
+        {post.data.updatedDate && <> · updated {fmt(post.data.updatedDate)}</>}
+      </p>
+      <div class="tags">
+        {post.data.tags.map((t) => <span class="tag">{t}</span>)}
+      </div>
+      <div class="prose">
+        <Content />
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .article { max-width: 720px; }
+  .back { display: inline-block; margin-bottom: 20px; font-size: 0.9rem; }
+  .article h1 { font-size: clamp(1.7rem, 4vw, 2.3rem); letter-spacing: -0.01em; }
+  .meta { margin: 10px 0 14px; font-size: 0.9rem; }
+  .prose { margin-top: 28px; }
+  .prose :global(p) { margin: 0 0 18px; }
+  .prose :global(h2) { margin: 34px 0 14px; font-size: 1.4rem; }
+  .prose :global(h3) { margin: 26px 0 10px; font-size: 1.15rem; }
+  .prose :global(ul), .prose :global(ol) { padding-left: 22px; margin: 0 0 18px; }
+  .prose :global(li) { margin-bottom: 8px; }
+  .prose :global(pre) {
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    overflow-x: auto;
+    font-size: 0.9rem;
+  }
+  .prose :global(code) {
+    background: var(--bg-soft);
+    padding: 2px 6px;
+    border-radius: 6px;
+    font-size: 0.88em;
+  }
+  .prose :global(pre code) { background: none; padding: 0; }
+  .prose :global(blockquote) {
+    border-left: 3px solid var(--accent);
+    margin: 0 0 18px;
+    padding: 4px 0 4px 16px;
+    color: var(--muted);
+  }
+  .prose :global(img) { max-width: 100%; border-radius: 10px; }
+</style>

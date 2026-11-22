@@ -1,0 +1,193 @@
+---
+import Layout from '../layouts/Layout.astro';
+import {
+  profile,
+  experience,
+  projects,
+  skills,
+  education,
+  certifications,
+} from '../data/site';
+---
+
+<Layout>
+  <!-- HERO -->
+  <section class="hero" id="top">
+    <div class="wrap">
+      <p class="eyebrow">{profile.location}</p>
+      <h1 class="hero-name">{profile.name}</h1>
+      <p class="hero-title">{profile.title} <span class="muted">— {profile.tagline}</span></p>
+      <p class="hero-summary">{profile.summary}</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href={`mailto:${profile.email}`}>Get in touch</a>
+        <a class="btn" href={profile.resume} target="_blank" rel="noopener">Download résumé</a>
+        <a class="btn" href={profile.socials.github} target="_blank" rel="noopener">GitHub</a>
+        <a class="btn" href={profile.socials.linkedin} target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="wrap">
+      <p class="section-title">About</p>
+      <p>
+        I'm a software engineer who enjoys the backend: designing services, keeping
+        systems reliable, and automating the dull parts. My day-to-day spans Java and
+        Spring Boot, relational and NoSQL databases, containers, and the Linux command
+        line. I care about clean, maintainable code and about systems that keep running
+        when it matters.
+      </p>
+      <p class="muted" style="margin-top:12px">
+        Currently pursuing an M.Tech in Information Technology at Kathmandu University while
+        working full-time as a Software Engineer.
+      </p>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section id="experience">
+    <div class="wrap">
+      <p class="section-title">Experience</p>
+      <div class="stack">
+        {experience.map((job) => (
+          <article class="card">
+            <div class="row">
+              <div>
+                <h3>{job.role}</h3>
+                <p class="muted">{job.company} · {job.location}</p>
+              </div>
+              <span class="period">{job.period}</span>
+            </div>
+            <ul>
+              {job.points.map((p) => <li>{p}</li>)}
+            </ul>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="wrap">
+      <p class="section-title">Projects</p>
+      <div class="stack">
+        {projects.map((proj) => (
+          <article class="card">
+            <div class="row">
+              <div>
+                <h3>{proj.name}</h3>
+                <p class="muted">{proj.blurb}</p>
+              </div>
+              {proj.link && (
+                <a class="btn" href={proj.link} target="_blank" rel="noopener">Code ↗</a>
+              )}
+            </div>
+            <ul>
+              {proj.points.map((p) => <li>{p}</li>)}
+            </ul>
+            <div class="tags">
+              {proj.stack.map((s) => <span class="tag">{s}</span>)}
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <div class="wrap">
+      <p class="section-title">Skills</p>
+      <div class="skills-grid">
+        {skills.map((group) => (
+          <div class="card">
+            <h3 class="skill-group">{group.group}</h3>
+            <div class="tags">
+              {group.items.map((s) => <span class="tag">{s}</span>)}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- EDUCATION + CERTS -->
+  <section id="education">
+    <div class="wrap edu-wrap">
+      <div>
+        <p class="section-title">Education</p>
+        <div class="stack">
+          {education.map((ed) => (
+            <div class="card">
+              <h3>{ed.school}</h3>
+              <p>{ed.degree}</p>
+              <p class="muted">{ed.place} · {ed.period}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div>
+        <p class="section-title">Certifications</p>
+        <div class="stack">
+          {certifications.map((c) => (
+            <div class="card">
+              <h3>{c.name}</h3>
+              <p class="muted">{c.issuer}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="wrap contact">
+      <p class="section-title">Contact</p>
+      <h2 class="contact-head">Let's build something reliable.</h2>
+      <p class="muted" style="margin:10px 0 22px">
+        Open to backend, DevOps, and full-stack opportunities. The quickest way to reach me is email.
+      </p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href={`mailto:${profile.email}`}>{profile.email}</a>
+        <a class="btn" href={profile.socials.github} target="_blank" rel="noopener">GitHub</a>
+        <a class="btn" href={profile.socials.linkedin} target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .hero { padding: 72px 0 56px; border-top: none; }
+  .eyebrow { color: var(--accent); font-size: 0.9rem; margin: 0 0 10px; font-weight: 500; }
+  .hero-name { font-size: clamp(2.2rem, 6vw, 3.4rem); font-weight: 700; letter-spacing: -0.02em; }
+  .hero-title { font-size: clamp(1.1rem, 3vw, 1.4rem); margin: 10px 0 20px; font-weight: 500; }
+  .hero-summary { max-width: 640px; color: var(--muted); font-size: 1.02rem; }
+  .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; }
+
+  .stack { display: flex; flex-direction: column; gap: 16px; }
+  .row { display: flex; justify-content: space-between; align-items: flex-start; gap: 14px; }
+  .period { color: var(--muted); font-size: 0.85rem; white-space: nowrap; }
+  .card h3 { font-size: 1.1rem; }
+  .card ul { margin: 14px 0 0; padding-left: 18px; color: var(--muted); }
+  .card li { margin-bottom: 7px; }
+  .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
+  }
+  .skill-group { font-size: 0.95rem; margin-bottom: 12px; color: var(--accent); }
+
+  .edu-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+  .contact-head { font-size: clamp(1.6rem, 4vw, 2.2rem); }
+
+  @media (max-width: 640px) {
+    .edu-wrap { grid-template-columns: 1fr; gap: 10px; }
+    .row { flex-direction: column; }
+    .period { white-space: normal; }
+  }
+</style>
